@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="GMT_2025.Controls.RegisterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             MaxHeight="20">
+    <Grid Margin="1">
+        <!-- 虛線底線 -->
+        <Rectangle Height="1"
+                   VerticalAlignment="Bottom"
+                   Stroke="Black"
+                   StrokeThickness="2"
+                   StrokeDashArray="1,1"/>
+
+        <!-- DockPanel 放置 TextBlock 和 ComboBox -->
+        <DockPanel>
+            <TextBlock Text="{Binding Name}"
+                       Padding="1"
+                       Margin="1"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       TextWrapping="Wrap"
+                       DockPanel.Dock="Left"/>
+
+            <ComboBox x:Name="ComboBox"
+                      Padding="1"
+                      Margin="1"
+                      HorizontalContentAlignment="Right"
+                      ItemsSource="{Binding ItemSources}"
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                      SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat=" {0} {1}">
+                                    <Binding Path="Value" />
+                                    <Binding Path="DataContext.Unit" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+
+            </ComboBox>
+        </DockPanel>
+    </Grid>
+</UserControl>

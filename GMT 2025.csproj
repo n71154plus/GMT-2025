@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net48</TargetFramework>
+		<LangVersion>9.0</LangVersion>
+		<UseWPF>true</UseWPF>
+		<RootNamespace>GMT_2025</RootNamespace>
+		<AssemblyName>GMT_2025</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\favicon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\favicon.ico">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Resource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="Costura.Fody" Version="6.0.0" PrivateAssets="all" />
+		<PackageReference Include="Fody" Version="6.9.2" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+		<PackageReference Include="System.Buffers" Version="4.6.0" />
+		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+		<PackageReference Include="System.Memory" Version="4.6.0" />
+		<PackageReference Include="System.Numerics.Vectors" Version="4.6.0" />
+		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.0" />
+		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+		<PackageReference Include="YamlDotNet" Version="16.3.0" />
+		<PackageReference Include="ZedGraph" Version="5.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EditorConfigFiles Remove="C:\repo\GMT 2025\.editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="C:\repo\GMT 2025\.editorconfig" />
+	</ItemGroup>
+
+</Project>
