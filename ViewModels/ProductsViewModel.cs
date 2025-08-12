@@ -1,15 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GMT_2025.Models;
-using GMT_2025.ViewModels;
-using GMT_2025;
-using System.Collections.ObjectModel;
+using GMT_2025.Services;
 using System;
-using YamlDotNet.Serialization.NamingConventions;
-using YamlDotNet.Serialization;
-using System.Windows;
-using System.IO;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 namespace GMT_2025.ViewModels
 {
     public partial class ProductsViewModel : ObservableObject
@@ -20,8 +16,13 @@ namespace GMT_2025.ViewModels
         [ObservableProperty]
         private ObservableCollection<MenuItemViewModel> menuItems = new();
 
-        public ProductsViewModel()
+        private readonly IProductService _productService;
+        private readonly Func<Product, ProductWindow> _productWindowFactory;
+
+        public ProductsViewModel(IProductService productService, Func<Product, ProductWindow> productWindowFactory)
         {
+            _productService = productService;
+            _productWindowFactory = productWindowFactory;
             _ = LoadProductsAsync().ContinueWith(t =>
             {
                 // 錯誤處理
@@ -31,32 +32,11 @@ namespace GMT_2025.ViewModels
 
         private async Task LoadProductsAsync()
         {
-            string yamlPath = "product.yaml";
-
-            if (!File.Exists(yamlPath))
-                return;
-
-            try
+            var products = await _productService.LoadProductsAsync();
+            ProductItems.Clear();
+            foreach (var product in products)
             {
-                using (var stream = new FileStream(yamlPath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true))
-                using (var reader = new StreamReader(stream))
-                {
-                    var yamlText = await reader.ReadToEndAsync();
-
-                    var deserializer = new DeserializerBuilder()
-                        .WithNamingConvention(PascalCaseNamingConvention.Instance)
-                        .Build();
-
-                    var product = deserializer.Deserialize<Product>(yamlText);
-
-                    ProductItems.Clear();
-                    ProductItems.Add(product);
-                    // 其他產品加入
-                }
-            }
-            catch (Exception ex)
-            {
-                // 錯誤處理
+                ProductItems.Add(product);
             }
         }
 
@@ -96,7 +76,7 @@ namespace GMT_2025.ViewModels
         [RelayCommand]
         private void OpenProductWindow(Product product)
         {
-            var productWindow = new ProductWindow(product);
+            var productWindow = _productWindowFactory(product);
             productWindow.Show();
         }
     }
