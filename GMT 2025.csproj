@@ -9,6 +9,10 @@
 		<AssemblyName>GMT_2025</AssemblyName>
 	</PropertyGroup>
 
+        <ItemGroup>
+          <Compile Remove="GMT.Tests\**\*.cs" />
+        </ItemGroup>
+
 	<ItemGroup>
 	  <None Remove="Resources\favicon.ico" />
 	</ItemGroup>
