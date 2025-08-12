@@ -2,10 +2,10 @@ using GMT_2025.Models;
 using GMT_2025.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 
 namespace GMT_2025.Controls
@@ -21,6 +21,15 @@ namespace GMT_2025.Controls
                 new PropertyMetadata(null, OnLayoutChanged));
 
         private Dictionary<string, RegisterControl> RegisterControls { get; } = new();
+
+        private class GroupPanel
+        {
+            public string GroupName { get; set; } = string.Empty;
+            public Brush Background { get; set; } = Brushes.Transparent;
+            public ObservableCollection<RegisterControl> Registers { get; } = new();
+        }
+
+        public ObservableCollection<GroupPanel> Panels { get; } = new();
 
         public MainContentUniformGrid()
         {
@@ -64,53 +73,12 @@ namespace GMT_2025.Controls
                 grid.BuildGrid();
         }
 
-        private (Border border, UniformGrid panel) CreateGroupPanel(string groupName, Color bgColor)
-        {
-            var groupPanel = new UniformGrid
-            {
-                Margin = new Thickness(0),
-                Rows = 9,
-                Columns = 1
-            };
-
-            var groupText = new TextBlock
-            {
-                Text = groupName,
-                FontWeight = FontWeights.UltraBold,
-                Padding = new Thickness(1),
-                Margin = new Thickness(1),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Top,
-                TextAlignment = TextAlignment.Center,
-                Foreground = Brushes.Blue,
-                TextWrapping = TextWrapping.Wrap
-            };
-
-            groupPanel.Children.Add(groupText);
-
-            var border = new Border
-            {
-                BorderThickness = new Thickness(1),
-                BorderBrush = Brushes.Gray,
-                CornerRadius = new CornerRadius(4),
-                Padding = new Thickness(1),
-                Margin = new Thickness(1),
-                Background = new SolidColorBrush(bgColor),
-                Child = groupPanel
-            };
-
-            return (border, groupPanel);
-        }
-
         private void BuildGrid()
         {
             if (RegisterControls == null || string.IsNullOrEmpty(GroupBy))
                 return;
 
-            var layout = new UniformGrid
-            {
-                Columns = Columns ?? 1
-            };
+            Panels.Clear();
 
             var rand = new Random();
             var usedColors = new HashSet<Color>();
@@ -121,14 +89,17 @@ namespace GMT_2025.Controls
                 int maxRows = Math.Min(9, group.Value.Count + 1);
                 int count = 0;
 
-                Border currentBorder = null;
-                UniformGrid currentPanel = null;
+                GroupPanel currentPanel = null;
 
                 void StartNewPanel()
                 {
                     var color = GenerateDistinctColor(rand, usedColors);
-                    (currentBorder, currentPanel) = CreateGroupPanel(group.Key, color);
-                    currentPanel.Rows = maxRows;
+                    currentPanel = new GroupPanel
+                    {
+                        GroupName = group.Key,
+                        Background = new SolidColorBrush(color)
+                    };
+                    Panels.Add(currentPanel);
                     count = 1;
                 }
 
@@ -141,20 +112,13 @@ namespace GMT_2025.Controls
 
                     if (count >= maxRows)
                     {
-                        layout.Children.Add(currentBorder);
                         StartNewPanel();
                     }
 
-                    currentPanel.Children.Add(control);
+                    currentPanel.Registers.Add(control);
                     count++;
                 }
-
-                if (currentBorder != null)
-                    layout.Children.Add(currentBorder);
             }
-
-            RootGrid.Children.Clear();
-            RootGrid.Children.Add(layout);
         }
 
         private static Dictionary<string, List<RegisterViewModel>> RegisterGroupBy(IDictionary<string, RegisterControl> registers, string groupPropertyName)
