@@ -22,11 +22,14 @@ namespace GMT_2025.ViewModels
 
         public ProductsViewModel()
         {
-            LoadProducts();
+            _ = LoadProductsAsync().ContinueWith(t =>
+            {
+                // 錯誤處理
+            }, TaskContinuationOptions.OnlyOnFaulted);
             InitializeMenuItems();
         }
 
-        private async void LoadProducts()
+        private async Task LoadProductsAsync()
         {
             string yamlPath = "product.yaml";
 
