@@ -22,7 +22,7 @@ namespace GMT_2025.Controls
 
         private Dictionary<string, RegisterControl> RegisterControls { get; } = new();
 
-        private class GroupPanel
+        public class GroupPanel
         {
             public string GroupName { get; set; } = string.Empty;
             public Brush Background { get; set; } = Brushes.Transparent;
