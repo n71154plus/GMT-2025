@@ -1,20 +1,25 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 
 namespace GMT_2025.Controls
 {
-    public class GroupedGrid : ContentControl
+    public partial class GroupedGrid : UserControl
     {
         private INotifyCollectionChanged? _currentCollection;
+
+        public GroupedGrid()
+        {
+            InitializeComponent();
+        }
+
         public static readonly DependencyProperty ItemClickCommandProperty =
             DependencyProperty.Register(
-                "ItemClickCommand",
+                nameof(ItemClickCommand),
                 typeof(ICommand),
                 typeof(GroupedGrid),
                 new PropertyMetadata(null, OnItemsSourceChanged));
@@ -24,7 +29,6 @@ namespace GMT_2025.Controls
             get => (ICommand)GetValue(ItemClickCommandProperty);
             set => SetValue(ItemClickCommandProperty, value);
         }
-
 
         public static readonly DependencyProperty ItemsSourceProperty =
             DependencyProperty.Register(nameof(ItemsSource), typeof(IEnumerable), typeof(GroupedGrid),
@@ -50,11 +54,9 @@ namespace GMT_2025.Controls
         {
             if (d is GroupedGrid grid)
             {
-                // 移除舊集合的事件監聽
                 if (grid._currentCollection != null)
                     grid._currentCollection.CollectionChanged -= grid.OnCollectionChanged;
 
-                // 新集合監聽
                 if (e.NewValue is INotifyCollectionChanged newCollection)
                 {
                     grid._currentCollection = newCollection;
@@ -68,15 +70,17 @@ namespace GMT_2025.Controls
                 grid.BuildGrid();
             }
         }
+
         private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            // 集合內容變更時也要重新建構畫面
             BuildGrid();
         }
+
         private void BuildGrid()
         {
-            if (ItemsSource == null || !ItemsSource.Cast<object>().Any() ||  string.IsNullOrEmpty(GroupBy) || ItemClickCommand == null)
+            if (ItemsSource == null || !ItemsSource.Cast<object>().Any() || string.IsNullOrEmpty(GroupBy) || ItemClickCommand == null)
                 return;
+
             var layout = new Grid
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -95,12 +99,9 @@ namespace GMT_2025.Controls
                 })
                 .ToList();
 
-            // 找最大欄位數 (最大元素數)
             int maxItems = grouped.Max(g => g.Count());
 
-            // 設定外層 Grid 欄位數: 1(分組標題) + maxItems (元素欄位)
-            layout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto }); // Group 標題欄
-
+            layout.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             for (int c = 0; c < maxItems; c++)
             {
                 layout.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -111,7 +112,6 @@ namespace GMT_2025.Controls
             {
                 layout.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
-                // Group 標題欄位
                 var groupLabel = new TextBlock
                 {
                     Text = group.Key,
@@ -132,7 +132,6 @@ namespace GMT_2025.Controls
                 Grid.SetColumn(groupBorder, 0);
                 layout.Children.Add(groupBorder);
 
-                // 加入每個元素的欄位
                 int col = 1;
                 foreach (var item in group)
                 {
@@ -162,7 +161,6 @@ namespace GMT_2025.Controls
                     layout.Children.Add(btnBorder);
                 }
 
-                // 不足的欄位填空白 Border (維持線條對齊)
                 for (; col <= maxItems; col++)
                 {
                     var emptyBorder = new Border
@@ -180,8 +178,8 @@ namespace GMT_2025.Controls
                 row++;
             }
 
-            this.Content = layout;
+            RootGrid.Children.Clear();
+            RootGrid.Children.Add(layout);
         }
-
     }
 }

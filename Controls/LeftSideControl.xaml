@@ -1,0 +1,50 @@
+<UserControl x:Class="GMT_2025.Controls.LeftSideControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UniformGrid Name="UniformGridLeftButton"
+                 Margin="0"
+                 Columns="1"
+                 Width="80"
+                 Background="Transparent">
+        <Border BorderThickness="1"
+                BorderBrush="Gray"
+                CornerRadius="4"
+                Padding="1"
+                Margin="1">
+            <DockPanel Margin="0">
+                <TextBlock Text="Device Address"
+                           Foreground="Blue"
+                           FontWeight="ExtraBold"
+                           TextWrapping="Wrap"
+                           Margin="0" />
+                <ListBox BorderThickness="0"
+                         Width="Auto"
+                         Margin="0"
+                         SelectedIndex="0"
+                         ItemsSource="{Binding DeviceAddress}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., StringFormat=0x{0:X2}}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
+        <Border BorderThickness="1"
+                BorderBrush="Gray"
+                CornerRadius="4"
+                Padding="1"
+                Margin="1">
+            <DockPanel Background="AliceBlue" Margin="0">
+                <TextBlock Text="CheckSum"
+                           Foreground="Blue"
+                           FontWeight="ExtraBold"
+                           Margin="0" />
+                <Viewbox Stretch="Uniform" Margin="0">
+                    <TextBlock Text="{Binding CheckSum, StringFormat={}{0:X6}}"
+                               TextAlignment="Center"/>
+                </Viewbox>
+            </DockPanel>
+        </Border>
+    </UniformGrid>
+</UserControl>
