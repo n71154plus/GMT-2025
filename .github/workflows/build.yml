@@ -27,4 +27,4 @@ jobs:
         with:
           name: build-output
           path: |
-            GMT*/bin/Release/*.exe
+            GMT*/bin/Release/net48/*.exe
