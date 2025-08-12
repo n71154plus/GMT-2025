@@ -13,21 +13,21 @@ namespace GMT_2025.ViewModels
         [ObservableProperty]
         private ObservableCollection<Product> productItems = new();
 
-        [ObservableProperty]
-        private ObservableCollection<MenuItemViewModel> menuItems = new();
-
         private readonly IProductService _productService;
         private readonly Func<Product, ProductWindow> _productWindowFactory;
+        private readonly Func<Product, ProductEditorWindow> _productEditorWindowFactory;
 
-        public ProductsViewModel(IProductService productService, Func<Product, ProductWindow> productWindowFactory)
+        public ProductsViewModel(IProductService productService,
+            Func<Product, ProductWindow> productWindowFactory,
+            Func<Product, ProductEditorWindow> productEditorWindowFactory)
         {
             _productService = productService;
             _productWindowFactory = productWindowFactory;
+            _productEditorWindowFactory = productEditorWindowFactory;
             _ = LoadProductsAsync().ContinueWith(t =>
             {
                 // 錯誤處理
             }, TaskContinuationOptions.OnlyOnFaulted);
-            InitializeMenuItems();
         }
 
         private async Task LoadProductsAsync()
@@ -39,37 +39,9 @@ namespace GMT_2025.ViewModels
                 ProductItems.Add(product);
             }
         }
-
-
-
-        private void InitializeMenuItems()
-        {
-            MenuItems.Clear();
-            MenuItems.Add(new MenuItemViewModel
-            {
-                Header = "_File",
-                Children =
-            {
-                new MenuItemViewModel { Header = "_New" },
-                new MenuItemViewModel { Header = "_Open" },
-                new MenuItemViewModel { Header = "_Exit", Command = new RelayCommand(Exit) }
-            }
-            });
-            MenuItems.Add(new MenuItemViewModel
-            {
-                Header = "_Edit",
-                Children =
-            {
-                new MenuItemViewModel { Header = "_Copy" },
-                new MenuItemViewModel { Header = "_Paste" }
-            }
-            });
-        }
-
-
+        [RelayCommand]
         private void Exit()
         {
-
             Application.Current.Shutdown();
         }
 
@@ -78,6 +50,13 @@ namespace GMT_2025.ViewModels
         {
             var productWindow = _productWindowFactory(product);
             productWindow.Show();
+        }
+
+        [RelayCommand]
+        private void OpenProductEditor()
+        {
+            var editor = _productEditorWindowFactory(new Product());
+            editor.Show();
         }
     }
 }
