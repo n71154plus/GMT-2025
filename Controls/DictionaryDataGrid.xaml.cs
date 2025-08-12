@@ -68,14 +68,14 @@ namespace GMT_2025.Controls
                 var column = new DataGridTextColumn
                 {
                     Header = key.ToString("X2"),
-                    Binding = new Binding($"[{colIndex}]"), // 綁定 List<byte> 的第 colIndex 個元素
+                    Binding = new Binding($"[{colIndex}]"), // 綁定單列 List<string> 的第 colIndex 個元素
                     Width = new DataGridLength(1, DataGridLengthUnitType.Star),  // 平均分配欄寬
                     ElementStyle = centerStyle
                 };
                 dataGrid.Columns.Add(column);
             }
 
-            // DataGrid ItemsSource 只要一行，存放所有的 value，型態是 List<byte>
+            // DataGrid ItemsSource 只要一行，存放所有的 value，型態是 List<List<string>>
             dataGrid.ItemsSource = new List<List<string>>
             {
                 new List<string>(Items.Values.Select(b => $"{b:X2}"))
