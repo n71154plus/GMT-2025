@@ -28,11 +28,12 @@
 		<PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
 		<PackageReference Include="System.Memory" Version="4.6.0" />
 		<PackageReference Include="System.Numerics.Vectors" Version="4.6.0" />
-		<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.0" />
-		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
-		<PackageReference Include="YamlDotNet" Version="16.3.0" />
-		<PackageReference Include="ZedGraph" Version="5.2.0" />
-	</ItemGroup>
+                <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.0" />
+                <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+                <PackageReference Include="YamlDotNet" Version="16.3.0" />
+                <PackageReference Include="ZedGraph" Version="5.2.0" />
+                <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        </ItemGroup>
 
 	<ItemGroup>
 	  <EditorConfigFiles Remove="C:\repo\GMT 2025\.editorconfig" />

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+using System.Windows;
+using GMT_2025.ViewModels;
 
 namespace GMT_2025
 {
@@ -7,9 +8,10 @@ namespace GMT_2025
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(ProductsViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
     }
 }
