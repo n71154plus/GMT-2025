@@ -16,13 +16,13 @@ namespace GMT_2025.Controls
 {
     public class LeftSideControl : ContentControl
     {
-        public static readonly DependencyProperty ControlCommmandsProperty =
-            DependencyProperty.Register(nameof(ControlCommmands), typeof(IDictionary<string, ControlCommand>), typeof(LeftSideControl),
+        public static readonly DependencyProperty ControlCommandsProperty =
+            DependencyProperty.Register(nameof(ControlCommands), typeof(IDictionary<string, ControlCommand>), typeof(LeftSideControl),
                 new PropertyMetadata(null, OnItemsSourceChanged));
-        public IDictionary<string, ControlCommand> ControlCommmands
+        public IDictionary<string, ControlCommand> ControlCommands
         {
-            get => (IDictionary<string, ControlCommand>)GetValue(ControlCommmandsProperty);
-            set => SetValue(ControlCommmandsProperty, value);
+            get => (IDictionary<string, ControlCommand>)GetValue(ControlCommandsProperty);
+            set => SetValue(ControlCommandsProperty, value);
         }
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
