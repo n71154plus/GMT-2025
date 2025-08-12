@@ -31,6 +31,7 @@ namespace GMT_2025
             services.AddSingleton<ProductsViewModel>();
             services.AddSingleton<MainWindow>();
             services.AddTransient<Func<Product, ProductWindow>>(sp => product => new ProductWindow(product));
+            services.AddTransient<Func<Product, ProductEditorWindow>>(sp => product => new ProductEditorWindow(product));
         }
     }
 }

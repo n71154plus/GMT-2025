@@ -5,25 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GMT_2025"
         xmlns:ctrl="clr-namespace:GMT_2025.Controls"
-        xmlns:vm="clr-namespace:GMT_2025.ViewModels"
         mc:Ignorable="d"
         Icon="pack://application:,,,/Resources/favicon.ico"
         Title="GMT 2025" Height="432" Width="768"
         FontFamily="Consolas" FontSize="12"
         WindowStartupLocation="CenterScreen">
     <DockPanel>
-        <Menu DockPanel.Dock="Top" ItemsSource="{Binding MenuItems}">
-            <Menu.ItemContainerStyle>
-                <Style TargetType="MenuItem">
-                    <Setter Property="Header" Value="{Binding Header}" />
-                    <Setter Property="Command" Value="{Binding Command}" />
-                </Style>
-            </Menu.ItemContainerStyle>
-            <Menu.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type vm:MenuItemViewModel}" ItemsSource="{Binding Children}">
-                    <TextBlock Text="{Binding Header}" />
-                </HierarchicalDataTemplate>
-            </Menu.Resources>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" />
+                <MenuItem Header="_Open" />
+                <MenuItem Header="_Exit" Command="{Binding ExitCommand}" />
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Copy" />
+                <MenuItem Header="_Paste" />
+                <MenuItem Header="Product _Editor" Command="{Binding OpenProductEditorCommand}" />
+            </MenuItem>
         </Menu>
 
         <ctrl:GroupedGrid
