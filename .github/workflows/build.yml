@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore "GMT 2025.sln"
+
+      - name: Build
+        run: msbuild "GMT 2025.sln" /p:Configuration=Release
+
+      - name: Run tests
+        run: dotnet test GMT.Tests/GMT.Tests.csproj --configuration Release
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            GMT*/bin/Release/*.exe
